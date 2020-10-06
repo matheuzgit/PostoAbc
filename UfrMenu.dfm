@@ -101,6 +101,7 @@ object FrmMenu: TFrmMenu
       Caption = 'Relat'#243'rio'
       object Relatriode1: TMenuItem
         Caption = 'Relat'#243'rio de Abastecimento'
+        OnClick = Relatriode1Click
       end
     end
     object Consulta1: TMenuItem

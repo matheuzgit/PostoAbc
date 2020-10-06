@@ -14,12 +14,22 @@ type
   TFrmConsultatanque = class(TForm)
     Panel1: TPanel;
     Panel2: TPanel;
-    DBGrid1: TDBGrid;
     DBGrid2: TDBGrid;
     BtnConsulta: TButton;
     Label1: TLabel;
-    DBLKTanque: TDBLookupComboBox;
     QryTanque: TFDQuery;
+    Dstanque: TDataSource;
+    DblkTanque: TDBLookupComboBox;
+    QryTanqueID_TANQUE: TStringField;
+    QryTanqueTIPO_COMBUSTIVEL: TStringField;
+    QryTanqueLITROS: TSingleField;
+    QryPesquisa: TFDQuery;
+    StringField1: TStringField;
+    StringField2: TStringField;
+    SingleField1: TSingleField;
+    dspesquisa: TDataSource;
+    procedure BtnConsultaClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -32,5 +42,30 @@ var
 implementation
 
 {$R *.dfm}
+
+uses UDados;
+
+procedure TFrmConsultatanque.BtnConsultaClick(Sender: TObject);
+begin
+  if DblkTanque.Text <> EmptyStr then
+  begin
+    QryPesquisa.SQL.Clear;
+    QryPesquisa.SQL.Add('SELECT * FROM TBTANQUE WHERE ID_TANQUE = '''+ DblkTanque.Text+'''');
+    QryPesquisa.Close;
+    QryPesquisa.open;
+  end
+  else
+  begin
+    QryPesquisa.SQL.Clear;
+    QryPesquisa.SQL.Add('SELECT * FROM TBTANQUE ');
+    QryPesquisa.Close;
+    QryPesquisa.open;
+  end;
+end;
+
+procedure TFrmConsultatanque.FormCreate(Sender: TObject);
+begin
+  QryTanque.open;
+end;
 
 end.

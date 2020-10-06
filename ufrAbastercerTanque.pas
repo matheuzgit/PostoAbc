@@ -57,17 +57,20 @@ begin
   if MEditLitos.Text > '10000'  then
     raise Exception.Create('Tanque tem suporte até 10.000 litros');
 
-  if  QryAbastecerLITROS.AsFloat >= 0  then
+  if  QryAbastecerLITROS.AsFloat > 0  then
     raise Exception.Create('Tanque só pode ser abastcido quando estiver vázio');
 
 
 
   if (DbLkTanque.Text <> '') and (MEditLitos.Text <> '') then
   begin
+
     QryAbastecer.SQL.Clear;
-    QryAbastecer.SQL.Add('UPDATE  TBTANQUE SET LITROS ='+ MEditLitos.Text +'WHERE ID_TANQUE =  ''' + DbLkTanque.Text+'''');
-    QryAbastecer.open;
+    QryAbastecer.SQL.Add('UPDATE  TBTANQUE SET LITROS =  '+ (MEditLitos.Text));
+    QryAbastecer.SQL.Add('where ID_TANQUE = '''+DbLkTanque.Text+'''');
+    QryAbastecer.ExecSQL;
     MessageDlg('Abastecimento feito com sucesso', mtInformation, [mbOK], 0);
+
   end
   else
   begin

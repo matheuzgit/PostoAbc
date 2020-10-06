@@ -49,6 +49,7 @@ object FrmConsultatanque: TFrmConsultatanque
     000007030000078F0000078F0000078F0000000000000000000000000000}
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
@@ -58,10 +59,6 @@ object FrmConsultatanque: TFrmConsultatanque
     Height = 299
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 232
-    ExplicitTop = 152
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object Panel2: TPanel
       Left = 1
       Top = 1
@@ -83,26 +80,8 @@ object FrmConsultatanque: TFrmConsultatanque
         Height = 25
         Caption = 'Consultar'
         TabOrder = 0
+        OnClick = BtnConsultaClick
       end
-      object DBLKTanque: TDBLookupComboBox
-        Left = 8
-        Top = 21
-        Width = 145
-        Height = 21
-        TabOrder = 1
-      end
-    end
-    object DBGrid1: TDBGrid
-      Left = 624
-      Top = 264
-      Width = 320
-      Height = 120
-      TabOrder = 1
-      TitleFont.Charset = DEFAULT_CHARSET
-      TitleFont.Color = clWindowText
-      TitleFont.Height = -11
-      TitleFont.Name = 'Tahoma'
-      TitleFont.Style = []
     end
     object DBGrid2: TDBGrid
       Left = 1
@@ -110,16 +89,96 @@ object FrmConsultatanque: TFrmConsultatanque
       Width = 633
       Height = 241
       Align = alClient
-      TabOrder = 2
+      DataSource = dspesquisa
+      TabOrder = 1
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -11
       TitleFont.Name = 'Tahoma'
       TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'ID_TANQUE'
+          Title.Caption = 'Identifica'#231#227'o do Tanque'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'TIPO_COMBUSTIVEL'
+          Title.Caption = 'Tipo de Combust'#237'vel'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'LITROS'
+          Title.Caption = 'Volume de Abastecimento atual'
+          Visible = True
+        end>
     end
   end
+  object DblkTanque: TDBLookupComboBox
+    Left = 8
+    Top = 21
+    Width = 145
+    Height = 21
+    KeyField = 'ID_TANQUE'
+    ListField = 'ID_TANQUE'
+    ListSource = Dstanque
+    TabOrder = 1
+  end
   object QryTanque: TFDQuery
-    Left = 208
-    Top = 136
+    Connection = DataModule1.FDconSYSCombo
+    SQL.Strings = (
+      'SELECT * FROM TBTANQUE')
+    Left = 72
+    Top = 208
+    object QryTanqueID_TANQUE: TStringField
+      FieldName = 'ID_TANQUE'
+      Origin = 'ID_TANQUE'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object QryTanqueTIPO_COMBUSTIVEL: TStringField
+      FieldName = 'TIPO_COMBUSTIVEL'
+      Origin = 'TIPO_COMBUSTIVEL'
+      Required = True
+    end
+    object QryTanqueLITROS: TSingleField
+      FieldName = 'LITROS'
+      Origin = 'LITROS'
+      Required = True
+    end
+  end
+  object Dstanque: TDataSource
+    DataSet = QryTanque
+    Left = 120
+    Top = 182
+  end
+  object QryPesquisa: TFDQuery
+    Connection = DataModule1.FDconSYSCombo
+    Left = 456
+    Top = 192
+    object StringField1: TStringField
+      FieldName = 'ID_TANQUE'
+      Origin = 'ID_TANQUE'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object StringField2: TStringField
+      FieldName = 'TIPO_COMBUSTIVEL'
+      Origin = 'TIPO_COMBUSTIVEL'
+      Required = True
+    end
+    object SingleField1: TSingleField
+      FieldName = 'LITROS'
+      Origin = 'LITROS'
+      Required = True
+    end
+  end
+  object dspesquisa: TDataSource
+    DataSet = QryPesquisa
+    Left = 344
+    Top = 198
   end
 end

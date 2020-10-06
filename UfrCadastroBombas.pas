@@ -81,7 +81,7 @@ begin
       else
         Break;
     end;
-    QryTanque.Next;
+    QryBombas.Next;
   end;
 
 
@@ -94,6 +94,8 @@ begin
   QryBombas.Params.ParamByName('IMPOSTO').AsFloat := IMPOSTO;
   QryBombas.Params.ParamByName('VALOR_LITRO').AsFloat := VALOR;
   QryBombas.ExecSQL;
+  MessageDlg('Bomba Cadastrada com Sucesso', mtInformation, [mbOK], 0);
+
 
 
 end;

@@ -3,7 +3,8 @@ unit UfrMenu;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Menus;
 
 type
@@ -23,6 +24,7 @@ type
     procedure Bombas1Click(Sender: TObject);
     procedure anque1Click(Sender: TObject);
     procedure anques1Click(Sender: TObject);
+    procedure Relatriode1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,11 +39,12 @@ implementation
 {$R *.dfm}
 
 uses ufrBombas, UfrCadastroBombas, ufrCadastroTanque, UfrConsultaTanque,
-  ufrPrincipal, UnFunc, UDados, ufrAbastercerTanque;
+  ufrPrincipal, UnFunc, UDados, ufrAbastercerTanque, UfrpRelatorioAbastecimento,
+  UfrRelatorioAbastecimento, URelAbastecimento;
 
 procedure TFrmMenu.anque1Click(Sender: TObject);
 var
-  CadTaque : TFrmCadastroTanque;
+  CadTaque: TFrmCadastroTanque;
 begin
   CadTaque := TFrmCadastroTanque.Create(Self);
   CadTaque.Show;
@@ -49,7 +52,7 @@ end;
 
 procedure TFrmMenu.anques1Click(Sender: TObject);
 var
-  ConsTanque : TFrmConsultatanque;
+  ConsTanque: TFrmConsultatanque;
 begin
   ConsTanque := TFrmConsultatanque.Create(Self);
   ConsTanque.Show;
@@ -57,10 +60,17 @@ end;
 
 procedure TFrmMenu.Bombas1Click(Sender: TObject);
 var
-  Cadbomba : TFrmCadBombas;
+  Cadbomba: TFrmCadBombas;
 begin
   Cadbomba := TFrmCadBombas.Create(Self);
   Cadbomba.Show;
+end;
+
+procedure TFrmMenu.Relatriode1Click(Sender: TObject);
+begin
+  FrpAbastecimento := TFrpAbastecimento.Create(Self);
+  FrpAbastecimento.RLReport1.PreviewModal;
+  FrpAbastecimento.Release;
 end;
 
 procedure TFrmMenu.Timer1Timer(Sender: TObject);

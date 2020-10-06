@@ -4,7 +4,7 @@ object DataModule1: TDataModule1
   Width = 535
   object FDconSYSCombo: TFDConnection
     Params.Strings = (
-      'Database=D:\Projetos\PostoAbc\Base\BDPOSTOABC.FDB'
+      'Database=D:\PostoAbc\Base\BDPOSTOABC.FDB'
       'User_Name=SYSDBA'
       'Password=masterkey'
       'Server=127.0.0.1'

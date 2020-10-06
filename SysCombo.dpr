@@ -10,7 +10,7 @@ uses
   ufrCadastroTanque in 'ufrCadastroTanque.pas' {FrmCadastroTanque},
   UfrConsultaTanque in 'UfrConsultaTanque.pas' {FrmConsultatanque},
   ufrAbastercerTanque in 'ufrAbastercerTanque.pas' {FrmAbastercerTanque},
-  UfrpRelatorioAbastecimento in 'UfrpRelatorioAbastecimento.pas' {FrpRelatorioAbastecimento};
+  URelAbastecimento in 'URelAbastecimento.pas' {FrpAbastecimento};
 
 {$R *.res}
 
@@ -19,6 +19,5 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFrmPrincipal, FrmPrincipal);
   Application.CreateForm(TDataModule1, DataModule1);
-  Application.CreateForm(TFrpRelatorioAbastecimento, FrpRelatorioAbastecimento);
   Application.Run;
 end.

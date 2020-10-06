@@ -97,6 +97,17 @@ begin
   QryBomba.Params.ParamByName('BOMBA').Value := bomba;
   QryBomba.open;
 
+  QryTanque.SQL.Clear;
+  QryTanque.SQL.Add('SELECT * FROM TBTANQUE WHERE ID_TANQUE =''' + QryBombaID_TANQUE.AsString+'''' );
+  QryTanque.close;
+  QryTanque.Open;
+
+
+  volumetanque :=  QryTanqueLITROS.AsFloat;
+
+  if volumetanque <= 0 then
+    raise Exception.Create('Tanque de combustível vazio');
+
   if  QryBombaBOMBA.AsString = EmptyStr then
     raise Exception.Create('Bomba não cadastrada');
 
@@ -105,6 +116,8 @@ begin
   mlgasolina := 0.100;
 
   imposto := StrToCurr(copy(MaskB2.Text,4,4));
+
+  percentual := QryBombaIMPOSTO.AsCurrency;
 
   percentual := percentual/100;
 
@@ -121,11 +134,11 @@ begin
 
     valorpago := valorpago - valorBomba;
   end;
-  EdtB1.Text := CurrToStr(mlgasolina * 1000);
+  EdtB2.Text := CurrToStr(mlgasolina * 1000);
 
-  MemoNotab1.Clear;
+  MemoNotab2.Clear;
 
-   data := ( FormatDateTime('dd.mm.yyyy hh:MM:ss', Now));
+  data := ( FormatDateTime('dd.mm.yyyy hh:MM:ss', Now));
 
   MemoNotab2.Lines.Add('Valor Pago : ' + MaskB2.Text);
   MemoNotab2.Lines.Add('Imposto encima do valor pago: ' + CurrToStr(imposto));
@@ -133,20 +146,25 @@ begin
   MemoNotab2.Lines.Add('Data/Horário: ' + data);
 
   QryAbastecimento.SQL.Clear;
-  QryAbastecimento.SQL.Add('INSERT INTO  TBBOMBAS(BOMBA, ID_TANQUE, DATAHORA , VALOR_PAGO, QUANTIDADE, IMPOSTO_PAGO)'+
+  QryAbastecimento.SQL.Add('INSERT INTO  TBABASTECIMENTO(BOMBA, ID_TANQUE, DATAHORA , VALOR_PAGO, QUANTIDADE, IMPOSTO_PAGO)'+
                     'VALUES(:BOMBA, :ID_TANQUE, :DATAHORA , :VALOR_PAGO, :QUANTIDADE, :IMPOSTO_PAGO)');
 
   QryAbastecimento.Params.ParamByName('BOMBA').AsString := bomba;
   QryAbastecimento.Params.ParamByName('ID_TANQUE').AsString := QryBombaID_TANQUE.AsString;
   QryAbastecimento.Params.ParamByName('DATAHORA').AsString := data;
-  QryAbastecimento.Params.ParamByName('VALOR_PAGO').AsCurrency  := StrToCurr(copy(MaskB3.Text,4,4));
-  QryAbastecimento.Params.ParamByName('QUANTIDADE').AsCurrency  :=  StrToCurr(EdtB3.Text);
+  QryAbastecimento.Params.ParamByName('VALOR_PAGO').AsCurrency  := StrToCurr(copy(MaskB2.Text,4,4));
+  QryAbastecimento.Params.ParamByName('QUANTIDADE').AsCurrency  :=  StrToCurr(EdtB2.Text);
   QryAbastecimento.Params.ParamByName('IMPOSTO_PAGO').AsCurrency  := imposto;
   QryAbastecimento.ExecSQL;
   MessageDlg('Abastecimento finalizado', mtInformation, [mbOK], 0);
 
 
+  volumetanque := volumetanque -  StrToCurr(EdtB2.Text);
 
+  QryVolumeTanque.SQL.Clear;
+  QryVolumeTanque.SQL.Add('UPDATE  TBTANQUE SET LITROS =  '+ CurrToStr(volumetanque));
+  QryVolumeTanque.SQL.Add('where ID_TANQUE = '''+QryBombaID_TANQUE.AsString+'''');
+  QryVolumeTanque.ExecSQL;
 end;
 
 procedure TFrmBombas.BtnAbastecerB3Click(Sender: TObject);
@@ -155,6 +173,17 @@ begin
   QryBomba.Close;
   QryBomba.Params.ParamByName('BOMBA').Value := bomba;
   QryBomba.open;
+
+  QryTanque.SQL.Clear;
+  QryTanque.SQL.Add('SELECT * FROM TBTANQUE WHERE ID_TANQUE =''' + QryBombaID_TANQUE.AsString+'''' );
+  QryTanque.close;
+  QryTanque.Open;
+
+
+  volumetanque :=  QryTanqueLITROS.AsFloat;
+
+  if volumetanque <= 0 then
+    raise Exception.Create('Tanque de combustível vazio');
 
   if  QryBombaBOMBA.AsString = EmptyStr then
     raise Exception.Create('Bomba não cadastrada');
@@ -165,6 +194,8 @@ begin
   mlgasolina := 0.100;
 
   imposto := StrToCurr(copy(MaskB3.Text,4,4));
+
+  percentual := QryBombaIMPOSTO.AsCurrency;
 
   percentual := percentual/100;
 
@@ -180,12 +211,11 @@ begin
 
     valorpago := valorpago - valorBomba;
   end;
-  EdtB1.Text := CurrToStr(mlgasolina * 1000);
+  EdtB3.Text := CurrToStr(mlgasolina * 1000);
 
-  MemoNotab1.Clear;
+  MemoNotab3.Clear;
 
-   data := ( FormatDateTime('dd.mm.yyyy hh:MM:ss', Now));
-
+  data := ( FormatDateTime('dd.mm.yyyy hh:MM:ss', Now));
 
   MemoNotab3.Lines.Add('Valor Pago : ' + MaskB3.Text);
   MemoNotab3.Lines.Add('Imposto encima do valor pago: ' + CurrToStr(imposto));
@@ -193,7 +223,7 @@ begin
   MemoNotab3.Lines.Add('Data/Horário: ' + data);
 
   QryAbastecimento.SQL.Clear;
-  QryAbastecimento.SQL.Add('INSERT INTO  TBBOMBAS(BOMBA, ID_TANQUE, DATAHORA , VALOR_PAGO, QUANTIDADE, IMPOSTO_PAGO)'+
+  QryAbastecimento.SQL.Add('INSERT INTO  TBABASTECIMENTO(BOMBA, ID_TANQUE, DATAHORA , VALOR_PAGO, QUANTIDADE, IMPOSTO_PAGO)'+
                     'VALUES(:BOMBA, :ID_TANQUE, :DATAHORA , :VALOR_PAGO, :QUANTIDADE, :IMPOSTO_PAGO)');
 
   QryAbastecimento.Params.ParamByName('BOMBA').AsString := bomba;
@@ -201,11 +231,17 @@ begin
   QryAbastecimento.Params.ParamByName('DATAHORA').AsString := data;
   QryAbastecimento.Params.ParamByName('VALOR_PAGO').AsCurrency  := StrToCurr(copy(MaskB3.Text,4,4));
   QryAbastecimento.Params.ParamByName('QUANTIDADE').AsCurrency  :=  StrToCurr(EdtB3.Text);
-  QryAbastecimento.Params.ParamByName('IMPOSTO_PAGO').AsCurrency  :=  imposto;
+  QryAbastecimento.Params.ParamByName('IMPOSTO_PAGO').AsCurrency  := imposto;
   QryAbastecimento.ExecSQL;
   MessageDlg('Abastecimento finalizado', mtInformation, [mbOK], 0);
 
 
+  volumetanque := volumetanque -  StrToCurr(EdtB3.Text);
+
+  QryVolumeTanque.SQL.Clear;
+  QryVolumeTanque.SQL.Add('UPDATE  TBTANQUE SET LITROS =  '+ CurrToStr(volumetanque));
+  QryVolumeTanque.SQL.Add('where ID_TANQUE = '''+QryBombaID_TANQUE.AsString+'''');
+  QryVolumeTanque.ExecSQL;
 end;
 
 procedure TFrmBombas.BtnAbastecerB4Click(Sender: TObject);
@@ -214,6 +250,18 @@ begin
   QryBomba.Close;
   QryBomba.Params.ParamByName('BOMBA').Value := bomba;
   QryBomba.open;
+
+  QryTanque.SQL.Clear;
+  QryTanque.SQL.Add('SELECT * FROM TBTANQUE WHERE ID_TANQUE =''' + QryBombaID_TANQUE.AsString+'''' );
+  QryTanque.close;
+  QryTanque.Open;
+
+
+  volumetanque :=  QryTanqueLITROS.AsFloat;
+
+  if volumetanque <= 0 then
+    raise Exception.Create('Tanque de combustível vazio');
+
 
   if  QryBombaBOMBA.AsString = EmptyStr then
     raise Exception.Create('Bomba não cadastrada');
@@ -224,6 +272,8 @@ begin
   mlgasolina := 0.100;
 
   imposto := StrToCurr(copy(MaskB4.Text,4,4));
+
+  percentual := QryBombaIMPOSTO.AsCurrency;
 
   percentual := percentual/100;
 
@@ -239,12 +289,11 @@ begin
 
     valorpago := valorpago - valorBomba;
   end;
-  EdtB1.Text := CurrToStr(mlgasolina * 1000);
+  EdtB4.Text := CurrToStr(mlgasolina * 1000);
 
-  MemoNotab1.Clear;
+  MemoNotab4.Clear;
 
-   data := ( FormatDateTime('dd.mm.yyyy hh:MM:ss', Now));
-
+  data := ( FormatDateTime('dd.mm.yyyy hh:MM:ss', Now));
 
   MemoNotab4.Lines.Add('Valor Pago : ' + MaskB4.Text);
   MemoNotab4.Lines.Add('Imposto encima do valor pago: ' + CurrToStr(imposto));
@@ -252,17 +301,25 @@ begin
   MemoNotab4.Lines.Add('Data/Horário: ' + data);
 
   QryAbastecimento.SQL.Clear;
-  QryAbastecimento.SQL.Add('INSERT INTO  TBBOMBAS(BOMBA, ID_TANQUE, DATAHORA , VALOR_PAGO, QUANTIDADE, IMPOSTO_PAGO)'+
+  QryAbastecimento.SQL.Add('INSERT INTO  TBABASTECIMENTO(BOMBA, ID_TANQUE, DATAHORA , VALOR_PAGO, QUANTIDADE, IMPOSTO_PAGO)'+
                     'VALUES(:BOMBA, :ID_TANQUE, :DATAHORA , :VALOR_PAGO, :QUANTIDADE, :IMPOSTO_PAGO)');
 
   QryAbastecimento.Params.ParamByName('BOMBA').AsString := bomba;
   QryAbastecimento.Params.ParamByName('ID_TANQUE').AsString := QryBombaID_TANQUE.AsString;
   QryAbastecimento.Params.ParamByName('DATAHORA').AsString := data;
-  QryAbastecimento.Params.ParamByName('VALOR_PAGO').AsCurrency  := StrToCurr(copy(MaskB3.Text,4,4));
-  QryAbastecimento.Params.ParamByName('QUANTIDADE').AsCurrency  :=  StrToCurr(EdtB3.Text);
+  QryAbastecimento.Params.ParamByName('VALOR_PAGO').AsCurrency  := StrToCurr(copy(MaskB4.Text,4,4));
+  QryAbastecimento.Params.ParamByName('QUANTIDADE').AsCurrency  :=  StrToCurr(EdtB4.Text);
   QryAbastecimento.Params.ParamByName('IMPOSTO_PAGO').AsCurrency  := imposto;
   QryAbastecimento.ExecSQL;
   MessageDlg('Abastecimento finalizado', mtInformation, [mbOK], 0);
+
+
+  volumetanque := volumetanque -  StrToCurr(EdtB4.Text);
+
+  QryVolumeTanque.SQL.Clear;
+  QryVolumeTanque.SQL.Add('UPDATE  TBTANQUE SET LITROS =  '+ CurrToStr(volumetanque));
+  QryVolumeTanque.SQL.Add('where ID_TANQUE = '''+QryBombaID_TANQUE.AsString+'''');
+  QryVolumeTanque.ExecSQL;
 end;
 
 procedure TFrmBombas.BtnBomba1Click(Sender: TObject);
@@ -271,6 +328,18 @@ begin
   QryBomba.Close;
   QryBomba.Params.ParamByName('BOMBA').Value := bomba;
   QryBomba.open;
+
+  QryTanque.SQL.Clear;
+  QryTanque.SQL.Add('SELECT * FROM TBTANQUE WHERE ID_TANQUE =''' + QryBombaID_TANQUE.AsString+'''' );
+  QryTanque.close;
+  QryTanque.Open;
+
+
+  volumetanque :=  QryTanqueLITROS.AsFloat;
+
+  if volumetanque <= 0 then
+    raise Exception.Create('Tanque de combustível vazio');
+
 
   if  QryBombaBOMBA.AsString = EmptyStr then
     raise Exception.Create('Bomba não cadastrada');
@@ -323,21 +392,13 @@ begin
   QryAbastecimento.ExecSQL;
   MessageDlg('Abastecimento finalizado', mtInformation, [mbOK], 0);
 
-  QryTanque.SQL.Clear;
-  QryTanque.SQL.Add('SELECT * FROM TBTANQUE WHERE ID_TANQUE =''' + QryBombaID_TANQUE.AsString+'''' );
-  QryTanque.close;
-  QryTanque.Open;
-
-
-  volumetanque :=  QryTanqueLITROS.AsFloat;
 
   volumetanque := volumetanque -  StrToCurr(EdtB1.Text);
 
-
   QryVolumeTanque.SQL.Clear;
-  QryVolumeTanque.SQL.Add('UPDATE  TBTANQUE SET LITROS ='+ CurrToStr(volumetanque) +'WHERE ID_TANQUE =  ''' + QryBombaID_TANQUE.AsString+'''''');
+  QryVolumeTanque.SQL.Add('UPDATE  TBTANQUE SET LITROS =  '+ CurrToStr(volumetanque));
+  QryVolumeTanque.SQL.Add('where ID_TANQUE = '''+QryBombaID_TANQUE.AsString+'''');
   QryVolumeTanque.ExecSQL;
-
 end;
 
 end.

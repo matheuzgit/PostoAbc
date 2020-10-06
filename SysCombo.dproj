@@ -134,8 +134,8 @@
             <Form>FrmAbastercerTanque</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="UfrpRelatorioAbastecimento.pas">
-            <Form>FrpRelatorioAbastecimento</Form>
+        <DCCReference Include="URelAbastecimento.pas">
+            <Form>FrpAbastecimento</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
