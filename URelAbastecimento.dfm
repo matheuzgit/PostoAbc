@@ -182,10 +182,6 @@ object FrpAbastecimento: TFrpAbastecimento
       '')
     Left = 432
     Top = 568
-    object QryResultAbastecimentoID_BOMBA: TIntegerField
-      FieldName = 'ID_BOMBA'
-      Origin = 'ID_BOMBA'
-    end
     object QryResultAbastecimentoBOMBA: TStringField
       FieldName = 'BOMBA'
       Origin = 'BOMBA'

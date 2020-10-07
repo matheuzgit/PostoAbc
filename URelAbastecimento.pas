@@ -13,7 +13,6 @@ type
   TFrpAbastecimento = class(TForm)
     QryResultAbastecimento: TFDQuery;
     DsResultAbastecimento: TDataSource;
-    QryResultAbastecimentoID_BOMBA: TIntegerField;
     QryResultAbastecimentoBOMBA: TStringField;
     QryResultAbastecimentoID_TANQUE: TStringField;
     QryResultAbastecimentoDATAHORA: TSQLTimeStampField;
